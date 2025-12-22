@@ -1,87 +1,80 @@
-# Analisis Sentimen Wuthering Waves
+# Analisis Sentimen Wuthering Waves (Optimized Edition)
 
-Project ini adalah aplikasi web untuk melakukan analisis sentimen terhadap ulasan atau teks yang berkaitan dengan game **Wuthering Waves**. Aplikasi ini menggunakan model Machine Learning **Random Forest** untuk mengklasifikasikan sentimen menjadi **Positif** atau **Negatif**.
+![WuWa Sentiment Logo](assets/logo.png)
 
-## 🚀 Fitur
+Project ini adalah aplikasi web analisis sentimen tingkat lanjut untuk ulasan game **Wuthering Waves**. Menggunakan model **Random Forest** yang telah dioptimasi dengan teknik **SMOTE** (untuk menangani ketidakseimbangan data) dan **Data Augmentation** (untuk menangani outlier), aplikasi ini mencapai akurasi **95.08%**.
 
-- **Analisis Sentimen**: Memprediksi apakah sebuah teks ulasan memiliki sentimen positif atau negatif.
-- **Preprocessing Teks Otomatis**: Melakukan pembersihan data, *stemming*, *stopword removal*, dan normalisasi kata secara otomatis sebelum prediksi.
-- **Web Interface**: Antarmuka pengguna yang responsif dan mudah digunakan berbasis React.
+Antarmuka pengguna (Frontend) telah didesain ulang sepenuhnya dengan tema **"Tacet Discord Terminal"** (Dark Sci-Fi) yang terinspirasi dari estetika dalam game.
 
-## 🛠️ Teknologi yang Digunakan
+---
+
+## 🚀 Fitur Unggulan
+
+### 🧠 Model & Intelijen
+- **Akurasi Tinggi (95%)**: Menggunakan Random Forest dengan Hyperparameter Tuning.
+- **SMOTE & Augmentasi**: Menangani ketidakseimbangan data dan kasus pojok (misal: "game nya jelek banget" terdeteksi akurat sebagai negatif).
+- **Preprocessing Komprehensif**: Cleaning, Stemming (Sastrawi), Stopword Removal, dan Normalisasi kata gaul (misal: `wuwa` -> `wuthering waves`, `char` -> `karakter`).
+
+### 🎨 Desain & UX (New!)
+- **Tema Dark Sci-Fi**: Glassmorphism, Neon Cyan/Gold Accents, dan Background HD.
+- **Dashboard Real-time**: Visualisasi metrik akurasi dan distribusi data menggunakan grafik interaktif.
+- **Terminal Input**: Antarmuka prediksi dengan animasi scanning futuristik.
+
+---
+
+## 🛠️ Teknologi Stack
 
 ### Backend
-- **Python**: Bahasa pemrograman utama.
-- **Flask**: Framework web untuk API.
-- **Scikit-Learn**: Library untuk membangun model Machine Learning (Random Forest & TF-IDF).
-- **Pandas & NumPy**: Untuk manipulasi data.
-- **Sastrawi**: Library NLP khusus Bahasa Indonesia (Stemming & Stopword removal).
-- **Joblib**: Untuk menyimpan dan memuat model yang telah dilatih.
+- **Python 3.8+**: Core logic.
+- **Flask**: REST API server.
+- **Scikit-Learn**: Random Forest, TF-IDF, GridSearchCV.
+- **Imbalanced-learn**: SMOTE Pipeline.
+- **Sastrawi**: NLP Bahasa Indonesia.
 
 ### Frontend
-- **React.js**: Library JavaScript untuk membangun antarmuka pengguna.
-- **Tailwind CSS**: Framework CSS untuk styling.
-- **Axios**: Untuk melakukan request HTTP ke backend.
+- **React 19**: UI Library modern.
+- **Tailwind CSS v3**: Styling framework dengan kustom konfigurasi (Animations, Typography).
+- **Lucide React**: Ikon set modern.
+- **Recharts**: Library grafik untuk visualisasi data.
 
-## 📂 Struktur Project
-
-```
-├── backend/
-│   ├── app.py              # Main Flask application
-│   ├── train_model.py      # Script untuk melatih model
-│   ├── data/               # Dataset (kamus baku, data latih)
-│   └── model/              # Model tersimpan (.pkl)
-├── frontend/
-│   └── sentimen_wuwa/      # Source code React
-└── README.md
-```
+---
 
 ## 📦 Instalasi dan Cara Menjalankan
 
-Ikuti langkah-langkah berikut untuk menjalankan aplikasi di lokal komputer Anda.
-
 ### 1. Prasyarat
-Pastikan Anda sudah menginstall:
-- [Python](https://www.python.org/) (v3.8+)
-- [Node.js](https://nodejs.org/) (v14+) & npm
+- Python (v3.8+)
+- Node.js (v18+) & npm
 
-### 2. Setup Backend
-
-Masuk ke folder `backend` dan install dependensi Python.
-
+### 2. Setup Backend (Server)
 ```bash
 cd backend
-pip install flask flask-cors pandas numpy scikit-learn Sastrawi nltk imbalanced-learn joblib
-```
-
-> **Catatan**: Jika diperlukan, download resource NLTK secara manual atau biarkan script menanganinya jika ada konfigurasi tambahan.
-
-Jalankan server Flask:
-
-```bash
+pip install -r requirements.txt  # Jika ada, atau install manual library di bawah
+# pip install flask flask-cors pandas numpy scikit-learn Sastrawi nltk imbalanced-learn joblib
 python app.py
 ```
-Server akan berjalan di `http://localhost:5000`.
+> Server berjalan di: `http://localhost:5000`
 
-### 3. Setup Frontend
-
-Buka terminal baru, masuk ke folder frontend project (`frontend/sentimen_wuwa`), install dependensi, dan jalankan aplikasi.
-
+### 3. Setup Frontend (UI)
 ```bash
 cd frontend/sentimen_wuwa
 npm install
-npm start
+npm run dev
 ```
-Aplikasi akan terbuka otomatis di browser pada `http://localhost:3000`.
-
-## 🤖 Cara Kerja Model
-
-1. **Input**: Pengguna memasukkan teks ulasan pada frontend.
-2. **Request**: Frontend mengirimkan teks ke API backend (`/predict`).
-3. **Preprocessing**: Backend membersihkan teks (lowercase, hapus simbol, normalisasi, stemming).
-4. **Transformasi**: Teks diubah menjadi vektor numerik menggunakan **TF-IDF**.
-5. **Prediksi**: Model **Random Forest** memprediksi sentimen berdasarkan vektor tersebut.
-6. **Output**: Hasil prediksi (Positif/Negatif) dikirim kembali ke frontend untuk ditampilkan.
+> Aplikasi berjalan di: `http://localhost:3000`
 
 ---
-Dibuat untuk Tugas Akhir Semester 8.
+
+## 🤖 Alur Kerja Data
+
+1.  **Input Pengguna**: Teks ulasan dimasukkan melalui terminal UI.
+2.  **Preprocessing**:
+    - Cleaning (Regex)
+    - Normalisasi (`wuwa` -> `wuthering waves`)
+    - Stopword Removal (`yang`, `dan`, dll dibuang)
+    - Stemming (`bermain` -> `main`)
+3.  **Vektorisasi**: TF-IDF mengubah teks menjadi angka.
+4.  **Prediksi**: Model Random Forest (trained on 3,741 augmented data) menentukan sentimen.
+5.  **Output Visual**: Hasil ditampilkan dengan indikator confidence level.
+
+---
+**Tugas Akhir - Analisis Sentimen Wuthering Waves**
